@@ -133,6 +133,7 @@ def load_checkpoint(args, trainer):
 
 def load_checkpoint_to_cpu(path, arg_overrides=None):
     """Loads a checkpoint to CPU (with upgrading for backward compatibility)."""
+    from fairseq import utils
     state = torch.load(
         path, map_location=lambda s, l: default_restore_location(s, 'cpu'),
     )
@@ -140,6 +141,7 @@ def load_checkpoint_to_cpu(path, arg_overrides=None):
     if arg_overrides is not None:
         for arg_name, arg_val in arg_overrides.items():
             setattr(args, arg_name, arg_val)
+    utils.import_user_module(args)
     state = _upgrade_state_dict(state)
     return state
 
@@ -345,6 +347,8 @@ def load_pretrained_component_from_model(
 
 
 def verify_checkpoint_directory(save_dir: str) -> None:
+    if not os.path.exists(save_dir):
+        os.makedirs(save_dir, exist_ok=True)
     temp_file_path = os.path.join(save_dir, 'dummy')
     try:
         with open(temp_file_path, 'w'):
