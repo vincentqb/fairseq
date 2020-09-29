@@ -1,0 +1,40 @@
+List of calls:
+- `torchhub.generate`
+    - `build_generator`
+        - `SequenceGenerator` (or `SequenceGeneratorWithAlignment`)
+    - `_build_batches`
+        - `resolve_max_positions`
+            - `_math_types`
+    - `apply_to_sample`
+    - `inference_step`
+        - `SequenceGenerator.generate`
+            - `_generate`
+                - `search.supports_constraints`
+                - `search.init_constraints`
+                    - `token_generation_constraints.ConstraintState` for `LexicallyConstrainedBeamSearch`
+                - `model.max_decoder_positions`
+                - `model.forward_encoder`
+                - `model.reorder_encoder_out`
+                - `model.reorder_incremental_state`
+                - `model.forward_decoder`
+                - `_prefix_tokens`
+                    - `replicate_first_beam`
+                - `_no_repeat_ngram`
+                    - `transpose_list`
+                    - `calculate_banned_tokens`
+                - `search.step`
+                    - `token_generation_constraints.ConstraintState` for `LexicallyConstrainedBeamSearch`
+                - `finalize_hypos`
+                    - `is_finished`
+                - `search.prune_sentences`
+                    - `token_generation_constraints.ConstraintState` for `LexicallyConstrainedBeamSearch`
+                - `search.update_constraints`
+                    - `token_generation_constraints.ConstraintState` for `LexicallyConstrainedBeamSearch`
+        - `SequenceGeneratorWithAlignment.generate` (alternative)
+            - `_generate`
+                - `super()._generate`
+                    - `_prepare_batch_for_alignment`
+                    - `data_utils.collate_tokens`
+                - `model.models`
+                - `model.forward_align`
+                - `utils.extract_hard_alignment`
